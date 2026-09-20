@@ -1,0 +1,34 @@
+{
+  "name": "sportconnect-pro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Deku-GH/SportConnect-Pro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Deku-GH/SportConnect-Pro/issues"
+  },
+  "homepage": "https://github.com/Deku-GH/SportConnect-Pro#readme",
+  "dependencies": {
+    "body-parser": "^2.3.0",
+    "dotenv": "^17.4.2",
+    "ejs": "^6.0.1",
+    "finalhandler": "^2.1.1",
+    "find-my-way": "^9.9.0",
+    "pg": "^8.23.0",
+    "serve-static": "^2.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

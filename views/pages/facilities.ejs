@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sconnect Pro - Facilities</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            ⚽ SCONNECT PRO
+        </div>
+
+        <nav>
+
+            <a href="/">
+                Dashboard
+            </a>
+
+            <a href="/facilities">
+                Facilities
+            </a>
+
+            <a href="/activities">
+                Activities
+            </a>
+
+            <a href="/members">
+                Members
+            </a>
+
+            <a href="/registrations">
+                Registrations
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="container">
+
+        <section class="page-header">
+
+            <div>
+
+                <h1>
+                    Facilities
+                </h1>
+
+                <p>
+                    Manage sports facilities and their capacity.
+                </p>
+
+            </div>
+
+
+            <a
+                href="/facilities/new"
+                class="btn btn-primary"
+            >
+                + Add Facility
+            </a>
+
+        </section>
+
+
+        <!-- ================= FACILITIES LIST ================= -->
+
+        <% if (!facilities || facilities.length === 0) { %>
+
+            <!-- EMPTY LIST -->
+
+            <section class="empty-state">
+
+                <div class="empty-icon">
+                    🏟️
+                </div>
+
+                <h2>
+                    No facilities found
+                </h2>
+
+                <p>
+                    You don't have any sports facilities yet.
+                </p>
+
+                <a
+                    href="/facilities/new"
+                    class="btn btn-primary"
+                >
+                    + Add your first facility
+                </a>
+
+            </section>
+
+
+        <% } else { %>
+
+
+            <!-- FACILITIES LIST -->
+
+            <section class="facilities-grid">
+
+                <% facilities.forEach(facility => { %>
+
+                    <article class="facility-card">
+
+
+                        <div class="facility-icon">
+                            🏟️
+                        </div>
+
+
+                        <div class="facility-content">
+
+                            <h2>
+                                <%= facility.name %>
+                            </h2>
+
+                            <p class="location">
+                                📍 <%= facility.location %>
+                            </p>
+
+                            <p class="capacity">
+                                👥
+                                ERP Capacity:
+                                <strong>
+                                    <%= facility.erp_capacity %>
+                                </strong>
+                                people
+                            </p>
+
+
+                            <!-- ACTIONS -->
+
+                            <div class="facility-actions">
+
+                                <a
+                                    href="/facilities/<%= facility.id %>"
+                                    class="btn btn-details"
+                                >
+                                    View Details
+                                </a>
+
+
+                                <form
+                                    action="/facilities/<%= facility.id %>/delete"
+                                    method="POST"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-delete"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                <% }) %>
+
+            </section>
+
+
+        <% } %>
+
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <p>
+            © 2026 Sconnect Pro
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>
