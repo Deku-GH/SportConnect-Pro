@@ -14,84 +14,51 @@
 
     <!-- ================= NAVBAR ================= -->
 
-    <header class="navbar">
-
-        <div class="logo">
-            ⚽ SCONNECT PRO
-        </div>
-
-        <nav>
-
-            <a href="/">Dashboard</a>
-
-            <a href="/facilities">
-                Facilities
-            </a>
-
-            <a href="/activities">
-                Activities
-            </a>
-
-            <a href="/members">
-                Members
-            </a>
-
-            <a href="/registrations">
-                Registrations
-            </a>
-
-        </nav>
-
-    </header>
-
-
-    <!-- ================= MAIN ================= -->
-    <main>
-
-        <section class="home">
-
-            <h1>Welcome to Sconnect Pro</h1>
-
-            <p>
-                Manage sports facilities, clubs and activities
-                from one platform.
-            </p>
-
-
-            <div class="home-buttons">
-
-                <a href="/facilities" class="home-btn">
-                    🏟️
-                    <span>Facilities</span>
-                </a>
-
-                <a href="/clubs" class="home-btn">
-                    🏢
-                    <span>Clubs</span>
-                </a>
-
-                <a href="/activities" class="home-btn">
-                    ⚽
-                    <span>Activities</span>
-                </a>
-
-            </div>
-
-        </section>
-
-    </main>
 
 
 
-    <!-- ================= FOOTER ================= -->
+    <%- include ('../partials/header.ejs')%>
+        <!-- ================= MAIN ================= -->
+        <main>
 
-    <footer>
+            <section class="home">
 
-        <p>
-            © 2026 Sconnect Pro
-        </p>
+                <h1>Welcome to Sconnect Pro</h1>
 
-    </footer>
+                <p>
+                    Manage sports facilities, clubs and activities
+                    from one platform.
+                </p>
+
+
+                <div class="home-buttons">
+
+                    <a href="/facilities" class="home-btn">
+                        🏟️
+                        <span>Facilities</span>
+                    </a>
+
+                    <a href="/clubs" class="home-btn">
+                        🏢
+                        <span>Clubs</span>
+                    </a>
+
+                    <a href="/activities" class="home-btn">
+                        ⚽
+                        <span>Activities</span>
+                    </a>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+
+        <!-- ================= FOOTER ================= -->
+        <%- include ('../partials/footer.ejs')%>
+
 
 </body>
 

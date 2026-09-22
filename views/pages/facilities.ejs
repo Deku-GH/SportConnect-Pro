@@ -1,209 +1,236 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Sconnect Pro - Facilities</title>
 
-    <link rel="stylesheet" href="/css/style.css">
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 
+    <!-- Your CSS -->
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
 
-
     <!-- ================= NAVBAR ================= -->
 
-    <header class="navbar">
-
-        <div class="logo">
-            ⚽ SCONNECT PRO
-        </div>
-
-        <nav>
-
-            <a href="/">
-                Dashboard
-            </a>
-
-            <a href="/facilities">
-                Facilities
-            </a>
-
-            <a href="/activities">
-                Activities
-            </a>
-
-            <a href="/members">
-                Members
-            </a>
-
-            <a href="/registrations">
-                Registrations
-            </a>
-
-        </nav>
-
-    </header>
+    <%- include('../partials/header.ejs') %>
 
 
     <!-- ================= MAIN ================= -->
 
-    <main class="container">
+    <main class="container py-5">
 
-        <section class="page-header">
+        <!-- ================= PAGE HEADER ================= -->
+
+        <div class="d-flex justify-content-between align-items-center mb-5">
 
             <div>
-
-                <h1>
+                <h1 class="fw-bold mb-2">
                     Facilities
                 </h1>
 
-                <p>
+                <p class="text-secondary mb-0">
                     Manage sports facilities and their capacity.
                 </p>
-
             </div>
 
 
-            <a
-                href="/facilities/new"
-                class="btn btn-primary"
-            >
+            <!-- Add Facility -->
+
+            <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#createFacilityModal">
+
                 + Add Facility
-            </a>
 
-        </section>
+            </button>
+
+        </div>
 
 
-        <!-- ================= FACILITIES LIST ================= -->
+        <!-- ================= FACILITIES ================= -->
 
         <% if (!facilities || facilities.length === 0) { %>
 
-            <!-- EMPTY LIST -->
+            <!-- EMPTY STATE -->
 
-            <section class="empty-state">
+            <div class="card border-0 shadow-sm text-center py-5">
 
-                <div class="empty-icon">
-                    🏟️
+                <div class="card-body">
+
+                    <div class="fs-1 mb-3">
+                        🏟️
+                    </div>
+
+                    <h2 class="h4 fw-bold">
+                        No facilities found
+                    </h2>
+
+                    <p class="text-secondary mb-4">
+                        You don't have any sports facilities yet.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="btn btn-danger"
+                        data-bs-toggle="modal"
+                        data-bs-target="#createFacilityModal">
+
+                        + Add your first facility
+
+                    </button>
+
                 </div>
 
-                <h2>
-                    No facilities found
-                </h2>
-
-                <p>
-                    You don't have any sports facilities yet.
-                </p>
-
-                <a
-                    href="/facilities/new"
-                    class="btn btn-primary"
-                >
-                    + Add your first facility
-                </a>
-
-            </section>
+            </div>
 
 
         <% } else { %>
 
 
-            <!-- FACILITIES LIST -->
+            <!-- ================= FACILITIES GRID ================= -->
 
-            <section class="facilities-grid">
+            <div class="row g-4">
 
                 <% facilities.forEach(facility => { %>
 
-                    <article class="facility-card">
+                    <div class="col-12 col-md-6 col-lg-4">
+
+                        <div class="card h-100 border-0 shadow-sm">
+
+                            <div class="card-body">
+
+                                <!-- Icon -->
+
+                                <div class="bg-light rounded p-3 d-inline-flex mb-3">
+
+                                    <span class="fs-3">
+                                        🏟️
+                                    </span>
+
+                                </div>
 
 
-                        <div class="facility-icon">
-                            🏟️
-                        </div>
+                                <!-- Facility name -->
+
+                                <h2 class="h5 fw-bold mb-2">
+
+                                    <%= facility.name %>
+
+                                </h2>
 
 
-                        <div class="facility-content">
+                                <!-- Address -->
 
-                            <h2>
-                                <%= facility.name %>
-                            </h2>
+                                <p class="text-secondary mb-2">
 
-                            <p class="location">
-                                📍 <%= facility.location %>
-                            </p>
+                                    📍 <%= facility.address %>
 
-                            <p class="capacity">
-                                👥
-                                ERP Capacity:
-                                <strong>
-                                    <%= facility.erp_capacity %>
-                                </strong>
-                                people
-                            </p>
+                                </p>
 
 
-                            <!-- ACTIONS -->
+                                <!-- Type -->
 
-                            <div class="facility-actions">
+                                <p class="mb-2">
 
-                                <a
-                                    href="/facilities/<%= facility.id %>"
-                                    class="btn btn-details"
-                                >
-                                    View Details
-                                </a>
+                                    <strong>Type:</strong>
+
+                                    <%= facility.type %>
+
+                                </p>
 
 
-                                <form
-                                    action="/facilities/<%= facility.id %>/delete"
-                                    method="POST"
-                                >
+                                <!-- Capacity -->
 
-                                    <button
-                                        type="submit"
-                                        class="btn btn-delete"
-                                    >
-                                        Delete
-                                    </button>
+                                <p class="text-secondary mb-4">
 
-                                </form>
+                                    👥 ERP Capacity:
+
+                                    <strong class="text-dark">
+
+                                        <%= facility.erp_capacity %>
+
+                                    </strong>
+
+                                    people
+
+                                </p>
+
+
+                                <!-- ================= ACTIONS ================= -->
+
+                                <div class="d-flex gap-2">
+
+                                    <!-- Details -->
+
+                                    <a
+                                        href="/facilities/<%= facility.id %>"
+                                        class="btn btn-dark flex-grow-1">
+
+                                        View Details
+
+                                    </a>
+
+
+                                    <!-- Delete -->
+
+                                    <form
+                                        action="/facilities/<%= facility.id %>/delete"
+                                        method="POST">
+                                        
+                                        
+  
+                                        <button
+                                            type="submit"
+                                            class="btn btn-outline-danger">
+
+                                            Delete
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
 
                             </div>
 
                         </div>
 
-                    </article>
+                    </div>
 
                 <% }) %>
 
-            </section>
-
+            </div>
 
         <% } %>
-
 
     </main>
 
 
+    <!-- ================= CREATE FACILITY MODAL ================= -->
+
+    <%- include('../partials/create_facilities.ejs') %>
+
+
     <!-- ================= FOOTER ================= -->
 
-    <footer>
+    <%- include('../partials/footer.ejs') %>
 
-        <p>
-            © 2026 Sconnect Pro
-        </p>
 
-    </footer>
+    <!-- ================= BOOTSTRAP JS ================= -->
 
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
 
 </body>
 
