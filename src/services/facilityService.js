@@ -1,44 +1,96 @@
-const pool = require("../config/db");
+const pool = require('../config/db');
+
 
 async function getAllFacilities() {
     const result = await pool.query(
-        "SELECT * FROM facility ORDER BY id"
+        `
+        SELECT
+            id,
+            name,
+            type,
+            erp_capacity,
+            address,
+            is_divisible
+        FROM facility
+        ORDER BY id ASC
+        `
     );
 
     return result.rows;
 }
 
+
+
+
 async function getFacilityById(id) {
     const result = await pool.query(
-        "SELECT * FROM facility WHERE id = $1",
+        `
+        SELECT
+            id,
+            name,
+            type,
+            erp_capacity,
+            address,
+            is_divisible
+        FROM facility
+        WHERE id = $1
+        `,
         [id]
     );
 
     return result.rows[0];
 }
 
-async function createFacility(name, type, erpCapacity, address) {
+
+
+async function createFacility(data) {
     const result = await pool.query(
-        `INSERT INTO facility 
-        (name, type, erp_capacity, address)
-        VALUES ($1, $2, $3, $4)
-        RETURNING *`,
-        [name, type, erpCapacity, address]
+        `
+        INSERT INTO facility (
+            name,
+            type,
+            erp_capacity,
+            address,
+            is_divisible
+        )
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *
+        `,
+        [
+            data.name,
+            data.type,
+            data.erp_capacity,
+            data.address,
+            data.is_divisible
+        ]
     );
 
     return result.rows[0];
 }
 
-async function updateFacility(id, name, type, erpCapacity, address) {
+
+
+async function updateFacility(data) {
     const result = await pool.query(
-        `UPDATE facility
-        SET name = $1,
+        `
+        UPDATE facility
+        SET
+            name = $1,
             type = $2,
             erp_capacity = $3,
-            address = $4
-        WHERE id = $5
-        RETURNING *`,
-        [name, type, erpCapacity, address, id]
+            address = $4,
+            is_divisible = $5
+        WHERE id = $6
+        RETURNING *
+        `,
+        [
+            data.name,
+            data.type,
+            data.erp_capacity,
+            data.address,
+            data.is_divisible,
+            data.id
+        ]
     );
 
     return result.rows[0];
@@ -46,14 +98,18 @@ async function updateFacility(id, name, type, erpCapacity, address) {
 
 async function deleteFacility(id) {
     const result = await pool.query(
-        `DELETE FROM facility
+        `
+        DELETE FROM facility
         WHERE id = $1
-        RETURNING *`,
+        RETURNING *
+        `,
         [id]
     );
 
     return result.rows[0];
 }
+
+
 
 module.exports = {
     getAllFacilities,

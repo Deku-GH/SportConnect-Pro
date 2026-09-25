@@ -17,26 +17,20 @@ async function getClubById(id) {
     return result.rows[0];
 }
 
-async function createClub(name, description, contact) {
-    const result = await pool.query(
-        `INSERT INTO club (name, description, contact)
-         VALUES ($1, $2, $3)
-         RETURNING *`,
-        [name, description, contact]
+async function createClub(data) {
+    
+    const result = await pool.query(`
+        INSERT INTO club (name, description, contact) VALUES ($1, $2, $3)RETURNING *`,
+        [data.name, data.description, data.contact]
     );
 
     return result.rows[0];
 }
 
-async function updateClub(id, name, description, contact) {
+async function updateClub(id, data) {
     const result = await pool.query(
-        `UPDATE club
-         SET name = $1,
-             description = $2,
-             contact = $3
-         WHERE id = $4
-         RETURNING *`,
-        [name, description, contact, id]
+        `UPDATE club SET name = $1,description = $2,contact = $3 WHERE id = $4 RETURNING *`,
+        [data.name, data.description, data.contact, id]
     );
 
     return result.rows[0];
