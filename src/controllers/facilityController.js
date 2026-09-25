@@ -2,7 +2,11 @@ const ejs = require('ejs');
 const path = require('path');
 const fs = require('fs');
 
+
 const facilityService = require("../services/facilityService");
+const parseBody = require('../utils/parseBody');
+
+
 
 
 
@@ -15,9 +19,14 @@ async function getFacilities(req, res) {
 
         const template = fs.readFileSync(filepath, "utf-8");
 
-        const html = ejs.render(template, {
-            facilities
-        });
+        const html = ejs.render(template,
+            {
+                facilities: facilities
+            },
+            {
+                filename: filepath
+            }
+        );
 
         res.writeHead(200, {
             "Content-Type": "text/html"
@@ -35,28 +44,19 @@ async function getFacilities(req, res) {
         res.end(`
             <h1>500 - Server Error</h1>
             <p>Unable to load facilities.</p>
+              <pre>${error.message}</pre>
         `);
     }
 }
 
 
-// =========================
-// GET FACILITY BY ID
-// =========================
 
-async function getFacilityById(req, res, id) {
+async function getFacilityById(req, res, params) {
     try {
-        const facility = await facilityService.getFacilityById(id);
+        const facility = await facilityService.getFacilityById(params.id);
 
         if (!facility) {
-            const filepath = path.join(
-                __dirname,
-                "..",
-                "..",
-                "views",
-                "pages",
-                "error.ejs"
-            );
+            const filepath = path.join("..", "..", "views", "pages", "error.ejs");
 
             const template = fs.readFileSync(filepath, "utf-8");
 
@@ -78,14 +78,18 @@ async function getFacilityById(req, res, id) {
             "..",
             "views",
             "pages",
-            "activity-detail.ejs"
+            "facilities-detail.ejs"
         );
 
         const template = fs.readFileSync(filepath, "utf-8");
 
         const html = ejs.render(template, {
             facility
-        });
+        },
+            {
+                filename: filepath
+            }
+        );
 
         res.writeHead(200, {
             "Content-Type": "text/html"
@@ -103,17 +107,18 @@ async function getFacilityById(req, res, id) {
         res.end(`
             <h1>500 - Server Error</h1>
             <p>Unable to load facility.</p>
+            <pre>${error.message}</pre>
         `);
     }
 }
 
 
-// =========================
-// CREATE FACILITY
-// =========================
 
-async function createFacility(req, res, data) {
+
+async function createFacility(req, res) {
+
     try {
+        const data = await parseBody(req);
         await facilityService.createFacility(data);
 
         res.writeHead(302, {
@@ -132,58 +137,52 @@ async function createFacility(req, res, data) {
         res.end(`
             <h1>500 - Server Error</h1>
             <p>Unable to create facility.</p>
+            <pre>${error.message}</pre>
         `);
     }
 }
 
 
-// =========================
-// UPDATE FACILITY
-// =========================
 
-async function updateFacility(req, res, id, data) {
+
+async function updateFacility(req, res, params) {
+
     try {
-        const facility = await facilityService.updateFacility(id, data);
 
-        if (!facility) {
-            res.writeHead(404, {
-                "Content-Type": "text/html"
-            });
+        const data = await parseBody(req);
 
-            return res.end(`
-                <h1>404 - Not Found</h1>
-                <p>Infrastructure introuvable.</p>
-            `);
-        }
+        data.id = params.id;
+
+        await facilityService.updateFacility(data);
 
         res.writeHead(302, {
-            "Location": `/facilities/${id}`
+            Location: '/facilities'
         });
 
         res.end();
 
     } catch (error) {
+
         console.error(error);
 
         res.writeHead(500, {
-            "Content-Type": "text/html"
+            'Content-Type': 'text/html'
         });
 
         res.end(`
             <h1>500 - Server Error</h1>
             <p>Unable to update facility.</p>
+            <pre>${error.message}</pre>
         `);
     }
 }
 
 
-// =========================
-// DELETE FACILITY
-// =========================
 
-async function deleteFacility(req, res, id) {
+async function deleteFacility(req, res, params) {
+
     try {
-        const facility = await facilityService.deleteFacility(id);
+        const facility = await facilityService.deleteFacility(params.id);
 
         if (!facility) {
             res.writeHead(404, {
@@ -212,6 +211,7 @@ async function deleteFacility(req, res, id) {
         res.end(`
             <h1>500 - Server Error</h1>
             <p>Unable to delete facility.</p>
+            <pre>${error.message}</pre>
         `);
     }
 }

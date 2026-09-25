@@ -1,0 +1,220 @@
+<div
+    class="modal fade"
+    id="createMemberModal"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Create Member
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <!-- FORM -->
+            <form
+                action="/members"
+                method="POST"
+            >
+
+                <div class="modal-body">
+
+                    <div class="row g-3">
+
+                        <!-- FIRST NAME -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                First Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="first_name"
+                                class="form-control"
+                                placeholder="Enter first name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- LAST NAME -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Last Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="last_name"
+                                class="form-control"
+                                placeholder="Enter last name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- BIRTH DATE -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Birth Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="birth_date"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- ADDRESS -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Address
+                            </label>
+
+                            <input
+                                type="text"
+                                name="address"
+                                class="form-control"
+                                placeholder="Marrakech"
+                            >
+
+                        </div>
+
+
+                        <!-- FAMILY -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Family
+                            </label>
+
+                            <select
+                                name="family_id"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    Choose a family
+                                </option>
+
+                                <% families.forEach(family => { %>
+
+                                    <option value="<%= family.id %>">
+                                        <%= family.name %>
+                                    </option>
+
+                                <% }) %>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- RESIDENT -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Residence
+                            </label>
+
+                            <select
+                                name="is_resident"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="true">
+                                    Resident
+                                </option>
+
+                                <option value="false">
+                                    Non-resident
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- MEDICAL STATUS -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Medical Status
+                            </label>
+
+                            <select
+                                name="medical_status"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="compliant">
+                                    Compliant
+                                </option>
+
+                                <option value="medical_non_compliant">
+                                    Medical non-compliant
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Create Member
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

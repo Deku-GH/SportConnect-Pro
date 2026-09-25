@@ -11,7 +11,9 @@ function home(req, res) {
 
     const template = fs.readFileSync(filepath, "utf-8");
 
-    const html = ejs.render(template);
+    const html = ejs.render(template,{},{
+        filename:filepath
+    });
 
     res.writeHead(200, {"Content-Type": "text/html"});
 

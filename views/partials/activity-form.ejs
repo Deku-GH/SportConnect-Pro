@@ -1,0 +1,252 @@
+<div class="modal fade" id="createActivityModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Create Activity
+                </h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+            </div>
+
+
+            <form action="/activities" method="POST">
+
+                <div class="modal-body">
+
+                    <div class="row g-3">
+
+
+                        <!-- Name -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Nom
+                            </label>
+
+                            <input type="text" name="name" class="form-control" required>
+
+                        </div>
+
+
+                        <!-- Price -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Prix de base (€)
+                            </label>
+
+                            <input type="number" name="base_price" class="form-control" min="0" step="0.01" required>
+
+                        </div>
+
+
+                        <!-- Description -->
+                        <div class="col-12">
+
+                            <label class="form-label">
+                                Description
+                            </label>
+
+                            <textarea name="description" class="form-control" rows="3"></textarea>
+
+                        </div>
+
+
+                        <!-- Capacity -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Capacité maximale
+                            </label>
+
+                            <input type="number" name="max_capacity" class="form-control" min="1" required>
+
+                        </div>
+
+
+                        <!-- Age Category -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Catégorie d'âge
+                            </label>
+
+                            <select name="age_category" class="form-select" required>
+
+                                <option value="Tous publics">
+                                    Tous publics
+                                </option>
+
+                                <option value="9">
+                                    U11
+                                </option>
+
+                                <option value="11">
+                                    U13
+                                </option>
+
+                                <option value="13">
+                                    U15
+                                </option>
+
+                                <option value="15">
+                                    U18
+                                </option>
+
+                                <option value="18">
+                                    Senior
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Day -->
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                Jour
+                            </label>
+
+                            <select name="day_of_week" class="form-select" required>
+
+                                <option value="Lundi">Lundi</option>
+                                <option value="Mardi">Mardi</option>
+                                <option value="Mercredi">Mercredi</option>
+                                <option value="Jeudi">Jeudi</option>
+                                <option value="Vendredi">Vendredi</option>
+                                <option value="Samedi">Samedi</option>
+                                <option value="Dimanche">Dimanche</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Start -->
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                Heure début
+                            </label>
+
+                            <input type="time" name="start_time" class="form-control" required>
+
+                        </div>
+
+
+                        <!-- End -->
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                Heure fin
+                            </label>
+
+                            <input type="time" name="end_time" class="form-control" required>
+
+                        </div>
+
+
+                        <!-- Medical -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Validité médicale
+                            </label>
+
+                            <select name="medical_validity_years" class="form-select" required>
+
+                                <option value="1">
+                                    1 an
+                                </option>
+
+                                <option value="3">
+                                    3 ans
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Facility -->
+                        <div class="col-md-6">
+
+
+                            <label class="form-label">
+                                facilities
+                            </label>
+                            <select name="facility_id" class="form-select" required>
+
+                                <% facilities.forEach(facility=> { %>
+
+                                    <option value="<%= facility.id %>">
+                                        <%= facility.name %>
+                                    </option>
+
+                                    <% }) %>
+
+                            </select>
+
+
+
+
+                        </div>
+
+
+                        <!-- Club -->
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Club
+                            </label>
+
+                            <select name="club_id" class="form-select" required>
+
+                                <option value="">
+                                    Choisir un club
+                                </option>
+
+                                <% clubs.forEach(club=> { %>
+
+                                    <option value="<%= club.id %>">
+                                        <%= club.name %>
+                                    </option>
+
+                                    <% }) %>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="btn btn-primary">
+                        Create Activity
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

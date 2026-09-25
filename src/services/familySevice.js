@@ -11,11 +11,8 @@ async function getAllFamilies() {
 }
 
 async function getFamilyById(id) {
-    const result = await pool.query(`
-        SELECT *
-        FROM family
-        WHERE id = $1
-    `, [id]);
+    const result = await pool.query(`SELECT *FROM family WHERE id = $1`,
+        [id]);
 
     return result.rows[0];
 }
@@ -25,10 +22,7 @@ async function createFamily(name, quotient_familial) {
         INSERT INTO family (name, quotient_familial)
         VALUES ($1, $2)
         RETURNING *
-    `, [
-        name,
-        quotient_familial
-    ]);
+    `, [name, quotient_familial]);
 
     return result.rows[0];
 }
@@ -41,11 +35,7 @@ async function updateFamily(id, name, quotient_familial) {
             quotient_familial = $2
         WHERE id = $3
         RETURNING *
-    `, [
-        name,
-        quotient_familial,
-        id
-    ]);
+    `, [name, quotient_familial, id]);
 
     return result.rows[0];
 }

@@ -18,7 +18,7 @@ async function getClubById(id) {
 }
 
 async function createClub(data) {
-    
+
     const result = await pool.query(`
         INSERT INTO club (name, description, contact) VALUES ($1, $2, $3)RETURNING *`,
         [data.name, data.description, data.contact]

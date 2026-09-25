@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Activities - Sconnect Pro</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <%- include('../partials/header.ejs') %>
+
+        <div class="container py-5">
+
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+                    <h1 class="fw-bold mb-1">
+                        <%= activity.name %>
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        Activity details
+                    </p>
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <a href="/activities" class="btn btn-outline-secondary">
+                        ← Back
+                    </a>
+
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#editActivityModal">
+                        Edit
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIVITY INFORMATION -->
+            <div class="card shadow-sm border-0 mb-4">
+
+                <div class="card-body p-4">
+
+                    <div class="row g-4">
+
+                        <!-- NAME -->
+                        <div class="col-md-6">
+
+                            <small class="text-muted">
+                                Activity Name
+                            </small>
+
+                            <h5 class="mt-1">
+                                <%= activity.name %>
+                            </h5>
+
+                        </div>
+
+
+                        <!-- PRICE -->
+                        <div class="col-md-3">
+
+                            <small class="text-muted">
+                                Base Price
+                            </small>
+
+                            <h5 class="mt-1">
+                                <%= activity.base_price %> €
+                            </h5>
+
+                        </div>
+
+
+                        <!-- CAPACITY -->
+                        <div class="col-md-3">
+
+                            <small class="text-muted">
+                                Maximum Capacity
+                            </small>
+
+                            <h5 class="mt-1">
+                                <%= activity.max_capacity %>
+                            </h5>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+                        <div class="col-12">
+
+                            <small class="text-muted">
+                                Description
+                            </small>
+
+                            <p class="mt-1 mb-0">
+                                <%= activity.description || 'No description' %>
+                            </p>
+
+                        </div>
+
+
+                        <!-- AGE -->
+                        <div class="col-md-4">
+
+                            <small class="text-muted">
+                                Age Category
+                            </small>
+
+                            <p class="mt-1 mb-0">
+
+                                <% if (activity.age_category==='Tous publics' ) { %>
+
+                                    <span class="badge bg-success">
+                                        Tous publics
+                                    </span>
+
+                                    <% } else { %>
+
+                                        <span class="badge bg-primary">
+                                            U<%= activity.age_category %>
+                                        </span>
+
+                                        <% } %>
+
+                            </p>
+
+                        </div>
+
+
+                        <!-- DAY -->
+                        <div class="col-md-4">
+
+                            <small class="text-muted">
+                                Day
+                            </small>
+
+                            <p class="mt-1 mb-0">
+                                <%= activity.day_of_week %>
+                            </p>
+
+                        </div>
+
+
+                        <!-- MEDICAL -->
+                        <div class="col-md-4">
+
+                            <small class="text-muted">
+                                Medical Validity
+                            </small>
+
+                            <p class="mt-1 mb-0">
+                                <%= activity.medical_validity_years %> year(s)
+                            </p>
+
+                        </div>
+
+
+                        <!-- TIME -->
+                        <div class="col-md-6">
+
+                            <small class="text-muted">
+                                Schedule
+                            </small>
+
+                            <p class="mt-1 mb-0">
+                                <%= activity.start_time %>
+                                    -
+                                    <%= activity.end_time %>
+                            </p>
+
+                        </div>
+
+
+                        <!-- FACILITY -->
+                        <div class="col-md-3">
+
+                            <small class="text-muted">
+                                Facility
+                            </small>
+
+                            <p class="mt-1 mb-0">
+                                <%= activity.facility_name %>
+                            </p>
+
+                        </div>
+
+
+                        <!-- CLUB -->
+                        <div class="col-md-3">
+
+                            <small class="text-muted">
+                                Club
+                            </small>
+
+                            <p class="mt-1 mb-0">
+                                <%= activity.club_name %>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DELETE -->
+            <div class="card border-danger">
+
+                <div class="card-body d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <h5 class="text-danger mb-1">
+                            Delete Activity
+                        </h5>
+
+                        <p class="text-muted mb-0">
+                            This action cannot be undone.
+                        </p>
+                    </div>
+
+                    <form action="/activities/<%= activity.id %>/delete" method="POST">
+
+                        <button type="submit" class="btn btn-danger"
+                            onclick="return confirm('Are you sure you want to delete this activity?')">
+                            Delete
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EDIT MODAL -->
+        <div class="modal fade" id="editActivityModal" tabindex="-1" aria-hidden="true">
+
+            <div class="modal-dialog modal-lg">
+
+                <div class="modal-content">
+
+                    <!-- HEADER -->
+                    <div class="modal-header">
+
+                        <h5 class="modal-title">
+                            Edit Activity
+                        </h5>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+                    </div>
+
+
+                    <!-- FORM -->
+                    <form action="/activities/<%= activity.id %>/update" method="POST">
+
+                        <div class="modal-body">
+
+                            <div class="row g-3">
+
+                                <!-- NAME -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Nom
+                                    </label>
+
+                                    <input type="text" name="name" class="form-control" value="<%= activity.name %>"
+                                        required>
+
+                                </div>
+
+
+                                <!-- PRICE -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Prix de base (€)
+                                    </label>
+
+                                    <input type="number" name="base_price" class="form-control" min="0" step="0.01"
+                                        value="<%= activity.base_price %>" required>
+
+                                </div>
+
+
+                                <!-- DESCRIPTION -->
+                                <div class="col-12">
+
+                                    <label class="form-label">
+                                        Description
+                                    </label>
+
+                                    <textarea name="description" class="form-control"
+                                        rows="3"><%= activity.description || '' %></textarea>
+
+                                </div>
+
+
+                                <!-- CAPACITY -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Capacité maximale
+                                    </label>
+
+                                    <input type="number" name="max_capacity" class="form-control" min="1"
+                                        value="<%= activity.max_capacity %>" required>
+
+                                </div>
+
+
+                                <!-- AGE -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Catégorie d'âge
+                                    </label>
+
+                                    <select name="age_category" class="form-select" required>
+
+                                        <option value="Tous publics" <%=activity.age_category==='Tous publics'
+                                            ? 'selected' : '' %>
+                                            >
+                                            Tous publics
+                                        </option>
+
+                                        <option value="9" <%=activity.age_category==='9' ? 'selected' : '' %>
+                                            >
+                                            U11
+                                        </option>
+
+                                        <option value="11" <%=activity.age_category==='11' ? 'selected' : '' %>
+                                            >
+                                            U13
+                                        </option>
+
+                                        <option value="13" <%=activity.age_category==='13' ? 'selected' : '' %>
+                                            >
+                                            U15
+                                        </option>
+
+                                        <option value="15" <%=activity.age_category==='15' ? 'selected' : '' %>
+                                            >
+                                            U18
+                                        </option>
+
+                                        <option value="18" <%=activity.age_category==='18' ? 'selected' : '' %>
+                                            >
+                                            Senior
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- DAY -->
+                                <div class="col-md-4">
+
+                                    <label class="form-label">
+                                        Jour
+                                    </label>
+
+                                    <select name="day_of_week" class="form-select" required>
+
+                                        <% const days=[ 'Lundi' , 'Mardi' , 'Mercredi' , 'Jeudi' , 'Vendredi' , 'Samedi'
+                                            , 'Dimanche' ]; %>
+
+                                            <% days.forEach(day=> { %>
+
+                                                <option value="<%= day %>" <%=activity.day_of_week===day ? 'selected'
+                                                    : '' %>
+                                                    >
+                                                    <%= day %>
+                                                </option>
+
+                                                <% }) %>
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- START -->
+                                <div class="col-md-4">
+
+                                    <label class="form-label">
+                                        Heure début
+                                    </label>
+
+                                    <input type="time" name="start_time" class="form-control"
+                                        value="<%= activity.start_time %>" required>
+
+                                </div>
+
+
+                                <!-- END -->
+                                <div class="col-md-4">
+
+                                    <label class="form-label">
+                                        Heure fin
+                                    </label>
+
+                                    <input type="time" name="end_time" class="form-control"
+                                        value="<%= activity.end_time %>" required>
+
+                                </div>
+
+
+                                <!-- MEDICAL -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Validité médicale
+                                    </label>
+
+                                    <select name="medical_validity_years" class="form-select" required>
+
+                                        <option value="1" <%=activity.medical_validity_years==1 ? 'selected' : '' %>
+                                            >
+                                            1 an
+                                        </option>
+
+                                        <option value="3" <%=activity.medical_validity_years==3 ? 'selected' : '' %>
+                                            >
+                                            3 ans
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- FACILITY -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Infrastructure
+                                    </label>
+
+                                    <select name="facility_id" class="form-select" required>
+
+                                        <% facilities.forEach(facility=> { %>
+
+                                            <option value="<%= facility.id %>" <%=activity.facility_id==facility.id
+                                                ? 'selected' : '' %>
+                                                >
+                                                <%= facility.name %>
+                                            </option>
+
+                                            <% }) %>
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- CLUB -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Club
+                                    </label>
+
+                                    <select name="club_id" class="form-select" required>
+
+                                        <% clubs.forEach(club=> { %>
+
+                                            <option value="<%= club.id %>" <%=activity.club_id==club.id ? 'selected'
+                                                : '' %>
+                                                >
+                                                <%= club.name %>
+                                            </option>
+
+                                            <% }) %>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- FOOTER -->
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="btn btn-primary">
+                                Save Changes
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <%- include('../partials/footer.ejs') %>
+
+            <!-- ================= HEADER ================= -->
+            <%- include('../partials/header.ejs') %>
+
+
+
+
+
+                <!-- ================= FOOTER ================= -->
+                <%- include('../partials/footer.ejs') %>
+
+
+
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

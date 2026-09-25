@@ -5,7 +5,6 @@ CREATE TABLE facility (
     erp_capacity INTEGER NOT NULL CHECK (erp_capacity > 0),
     address VARCHAR(255) NOT NULL,
     is_divisible BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE club (
@@ -13,7 +12,6 @@ CREATE TABLE club (
     name VARCHAR(150) NOT NULL,
     description TEXT,
     contact VARCHAR(150),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE family (
@@ -23,7 +21,6 @@ CREATE TABLE family (
         quotient_familial IS NULL
         OR quotient_familial >= 0
     ),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE activity (
@@ -37,7 +34,6 @@ CREATE TABLE activity (
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
 
-    -- Medical certificate validity in years
     medical_validity_years INTEGER NOT NULL DEFAULT 1,
 
     facility_id INTEGER NOT NULL,
@@ -92,17 +88,9 @@ CREATE TABLE member (
     birth_date DATE NOT NULL,
     address VARCHAR(255),
 
-    -- Used for municipal resident pricing
-    -- and waiting-list priority
     is_resident BOOLEAN NOT NULL DEFAULT TRUE,
 
-    -- Medical information
     medical_status VARCHAR(50) NOT NULL DEFAULT 'compliant',
-    medical_certificate_date DATE,
-
-    -- Pass'Sport
-    pass_sport_code VARCHAR(100),
-    pass_sport_valid_until DATE,
 
     family_id INTEGER NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -128,7 +116,6 @@ CREATE TABLE registration (
     registration_date DATE NOT NULL DEFAULT CURRENT_DATE,
     payment_option VARCHAR(20) NOT NULL DEFAULT '1x',
 
-    -- Important for family discount calculation
     season VARCHAR(9) NOT NULL,
 
     member_id INTEGER NOT NULL,
@@ -157,8 +144,7 @@ CREATE TABLE registration (
         REFERENCES activity (id)
         ON DELETE CASCADE,
 
-    -- Prevent the same member from registering twice
-    -- for the same activity in the same season
+    -
     CONSTRAINT unique_member_activity_season
         UNIQUE (member_id, activity_id, season)
 );
@@ -195,11 +181,7 @@ CREATE TABLE waiting_list (
         ON DELETE CASCADE
 );
 
--- =========================================================
--- INDEXES
--- =========================================================
-
--- Activity searches
+-
 CREATE INDEX idx_activity_facility
     ON activity (facility_id);
 
@@ -209,7 +191,6 @@ CREATE INDEX idx_activity_club
 CREATE INDEX idx_activity_day
     ON activity (day_of_week);
 
--- Member / family
 CREATE INDEX idx_member_family
     ON member (family_id);
 
@@ -222,7 +203,6 @@ CREATE INDEX idx_registration_member
 CREATE INDEX idx_registration_season
     ON registration (season);
 
--- Waiting list
 CREATE INDEX idx_waiting_activity_status
     ON waiting_list (activity_id, status);
 

@@ -2,32 +2,30 @@ const ejs = require('ejs');
 const path = require('path');
 const fs = require('fs');
 
-const activityService = require('../services/ActivityService');
-const clubService = require('../services/clubService');
-const facilityService = require('../services/facilityService');
+const familyService = require('../services/familyService');
 const parseBody = require('../utils/parseBody');
 
-
-
-
-async function getAllActivities(req, res) {
+async function getAllFamilies(req, res) {
 
     try {
-        const clubs = await clubService.getAllClubs();
-        const facilities = await facilityService.getAllFacilities();
 
-        const activities = await activityService.getAllActivities();
+        const families = await familyService.getAllFamilies();
 
-        const filepath = path.join(__dirname, '..', '..', 'views', 'pages', 'activities.ejs');
+        const filepath = path.join(
+            __dirname,
+            '..',
+            '..',
+            'views',
+            'pages',
+            'families.ejs'
+        );
 
         const template = fs.readFileSync(filepath, 'utf-8');
 
         const html = ejs.render(
             template,
             {
-                activities: activities,
-                clubs: clubs,
-                facilities: facilities
+                families: families
             },
             {
                 filename: filepath
@@ -50,138 +48,21 @@ async function getAllActivities(req, res) {
 
         res.end(`
             <h1>500 - Server Error</h1>
-            <p>Unable to load activities.</p>
+            <p>Unable to load families.</p>
             <pre>${error.message}</pre>
         `);
     }
 }
 
-
-
-
-async function getActivityById(req, res, params) {
+async function getFamilyById(req, res, params) {
 
     try {
 
-        const activity = await activityService.getActivityById(Number(params.id));
-        const clubs = await clubService.getAllClubs();
-        const facilities = await facilityService.getAllFacilities();
+        const id = Number(params.id);
 
+        const family = await familyService.getFamilyById(id);
 
-        const filepath = path.join(__dirname, '..', '..', 'views', 'pages', 'activity-detail.ejs');
-
-        const template = fs.readFileSync(filepath, 'utf-8');
-
-        const html = ejs.render(
-            template,
-            {
-                activity: activity,
-                clubs: clubs,
-                facilities: facilities
-            },
-            {
-                filename: filepath
-            }
-        );
-
-        res.writeHead(200, {
-            'Content-Type': 'text/html'
-        });
-
-        res.end(html);
-
-    } catch (error) {
-
-        console.error(error);
-
-        res.writeHead(500, {
-            'Content-Type': 'text/html'
-        });
-
-        res.end(`
-            <h1>500 - Server Error</h1>
-            <p>Unable to load activity.</p>
-            <pre>${error.message}</pre>
-        `);
-    }
-}
-
-
-
-async function createActivity(req, res) {
-
-    try {
-
-        const data = await parseBody(req);
-
-        await activityService.createActivity(data);
-
-        res.writeHead(302, {
-            Location: '/activities'
-        });
-
-        res.end();
-
-    } catch (error) {
-
-        console.error(error);
-
-        res.writeHead(500, {
-            'Content-Type': 'text/html'
-        });
-
-        res.end(`
-            <h1>500 - Server Error</h1>
-            <p>Unable to create activity.</p>
-            <pre>${error.message}</pre>
-        `);
-    }
-}
-
-
-async function updateActivity(req, res, params) {
-
-    try {
-
-        const data = await parseBody(req);
-
-        const id = params.id;
-
-        await activityService.updateActivity(data, id);
-
-        res.writeHead(302, {
-          Location: `/activities/${id}`
-        });
-
-        res.end();
-
-    } catch (error) {
-
-        console.error(error);
-
-        res.writeHead(500, {
-            'Content-Type': 'text/html'
-        });
-
-        res.end(`
-            <h1>500 - Server Error</h1>
-            <p>Unable to update activity.</p>
-            <pre>${error.message}</pre>
-        `);
-    }
-}
-
-
-
-async function deleteActivity(req, res, params) {
-
-    try {
-
-        const id = params.id;
-
-        const activity = await activityService.deleteActivity(id);
-
-        if (!activity) {
+        if (!family) {
 
             res.writeHead(404, {
                 'Content-Type': 'text/html'
@@ -189,12 +70,67 @@ async function deleteActivity(req, res, params) {
 
             return res.end(`
                 <h1>404 - Not Found</h1>
-                <p>Activité introuvable.</p>
+                <p>Family not found.</p>
+                <a href="/families">Back to families</a>
             `);
         }
 
+        const filepath = path.join(
+            __dirname,
+            '..',
+            '..',
+            'views',
+            'pages',
+            'family-detail.ejs'
+        );
+
+        const template = fs.readFileSync(filepath, 'utf-8');
+
+        const html = ejs.render(
+            template,
+            {
+                family: family
+            },
+            {
+                filename: filepath
+            }
+        );
+
+        res.writeHead(200, {
+            'Content-Type': 'text/html'
+        });
+
+        res.end(html);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.writeHead(500, {
+            'Content-Type': 'text/html'
+        });
+
+        res.end(`
+            <h1>500 - Server Error</h1>
+            <p>Unable to load family.</p>
+            <pre>${error.message}</pre>
+        `);
+    }
+}
+
+async function createFamily(req, res) {
+
+    try {
+
+        const data = await parseBody(req);
+
+        await familyService.createFamily(
+            data.name,
+            data.quotient_familial || null
+        );
+
         res.writeHead(302, {
-            Location: '/activities'
+            Location: '/families'
         });
 
         res.end();
@@ -209,19 +145,95 @@ async function deleteActivity(req, res, params) {
 
         res.end(`
             <h1>500 - Server Error</h1>
-            <p>Unable to delete activity.</p>
+            <p>Unable to create family.</p>
             <pre>${error.message}</pre>
         `);
     }
 }
 
+async function updateFamily(req, res, params) {
 
+    try {
 
-module.exports = parseBody;
+        const data = await parseBody(req);
+
+        const id = Number(params.id);
+
+        await familyService.updateFamily(
+            id,
+            data.name,
+            data.quotient_familial || null
+        );
+
+        res.writeHead(302, {
+            Location: `/families/${id}`
+        });
+
+        res.end();
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.writeHead(500, {
+            'Content-Type': 'text/html'
+        });
+
+        res.end(`
+            <h1>500 - Server Error</h1>
+            <p>Unable to update family.</p>
+            <pre>${error.message}</pre>
+        `);
+    }
+}
+
+async function deleteFamily(req, res, params) {
+
+    try {
+
+        const id = Number(params.id);
+
+        const family = await familyService.deleteFamily(id);
+
+        if (!family) {
+
+            res.writeHead(404, {
+                'Content-Type': 'text/html'
+            });
+
+            return res.end(`
+                <h1>404 - Not Found</h1>
+                <p>Family not found.</p>
+                <a href="/families">Back to families</a>
+            `);
+        }
+
+        res.writeHead(302, {
+            Location: '/families'
+        });
+
+        res.end();
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.writeHead(500, {
+            'Content-Type': 'text/html'
+        });
+
+        res.end(`
+            <h1>500 - Server Error</h1>
+            <p>Unable to delete family.</p>
+            <pre>${error.message}</pre>
+        `);
+    }
+}
+
 module.exports = {
-    getAllActivities,
-    getActivityById,
-    createActivity,
-    updateActivity,
-    deleteActivity
+    getAllFamilies,
+    getFamilyById,
+    createFamily,
+    updateFamily,
+    deleteFamily
 };

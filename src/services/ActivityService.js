@@ -30,19 +30,7 @@ async function getActivityById(id) {
     return result.rows[0];
 }
 
-async function createActivity(
-    name,
-    description,
-    base_price,
-    max_capacity,
-    age_category,
-    day_of_week,
-    start_time,
-    end_time,
-    medical_validity_years,
-    facility_id,
-    club_id
-) {
+async function createActivity(data) {
     const result = await pool.query(`
         INSERT INTO activity (
             name,
@@ -63,36 +51,23 @@ async function createActivity(
         )
         RETURNING *
     `, [
-        name,
-        description,
-        base_price,
-        max_capacity,
-        age_category,
-        day_of_week,
-        start_time,
-        end_time,
-        medical_validity_years,
-        facility_id,
-        club_id
+        data.name,
+        data.description,
+        data.base_price,
+        data.max_capacity,
+        data.age_category,
+        data.day_of_week,
+        data.start_time,
+        data.end_time,
+        data.medical_validity_years,
+        data.facility_id,
+        data.club_id
     ]);
 
     return result.rows[0];
 }
 
-async function updateActivity(
-    id,
-    name,
-    description,
-    base_price,
-    max_capacity,
-    age_category,
-    day_of_week,
-    start_time,
-    end_time,
-    medical_validity_years,
-    facility_id,
-    club_id
-) {
+async function updateActivity(data,id) {
     const result = await pool.query(`
         UPDATE activity
         SET
@@ -110,17 +85,17 @@ async function updateActivity(
         WHERE id = $12
         RETURNING *
     `, [
-        name,
-        description,
-        base_price,
-        max_capacity,
-        age_category,
-        day_of_week,
-        start_time,
-        end_time,
-        medical_validity_years,
-        facility_id,
-        club_id,
+        data.name,
+        data.description,
+        data.base_price,
+        data.max_capacity,
+        data.age_category,
+        data.day_of_week,
+        data.start_time,
+        data.end_time,
+        data.medical_validity_years,
+        data.facility_id,
+        data.club_id,
         id
     ]);
 
